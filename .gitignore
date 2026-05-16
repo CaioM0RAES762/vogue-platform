@@ -1,0 +1,45 @@
+# dependencies
+node_modules
+.pnp
+.pnp.js
+
+# build output
+dist
+build
+.next
+out
+
+# environment — NEVER commit real .env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# prisma
+prisma/migrations/dev.db
+
+# testing
+coverage
+.nyc_output
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+*.suo
+*.user
+
+# turbo
+.turbo
+
+# sentry
+.sentryclirc

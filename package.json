@@ -1,0 +1,29 @@
+{
+  "name": "janainamoda",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:api": "pnpm --filter api dev",
+    "dev:web": "pnpm --filter web dev",
+    "build:api": "pnpm --filter api build",
+    "build:web": "pnpm --filter web build",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\" --ignore-path .prettierignore",
+    "prisma:generate": "pnpm --filter api prisma:generate",
+    "prisma:migrate:dev": "pnpm --filter api prisma:migrate:dev",
+    "prisma:studio": "pnpm --filter api prisma:studio"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.13.0",
+    "@typescript-eslint/parser": "^7.13.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.2",
+    "typescript": "^5.5.2"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  }
+}

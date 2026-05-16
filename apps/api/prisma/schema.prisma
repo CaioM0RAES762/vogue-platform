@@ -1,0 +1,11 @@
+// Schema base — Sprint 2
+// Schema completo com todos os models será implementado na Sprint 3
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
