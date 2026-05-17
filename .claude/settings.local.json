@@ -27,7 +27,11 @@
       "Bash(pnpm --filter web add react-hook-form @hookform/resolvers)",
       "Bash(pnpm --filter api exec tsc --noEmit)",
       "Bash(pnpm --filter api test -- --testPathPattern=\"auth.service.spec\" --no-coverage)",
-      "Bash(npx jest *)"
+      "Bash(npx jest *)",
+      "Bash(pnpm add *)",
+      "Bash(npx tsc *)",
+      "Bash(node --max-old-space-size=512 node_modules/.bin/jest \"products.service.spec\" --no-coverage --testTimeout=30000)",
+      "PowerShell(cd \"c:\\\\Users\\\\Caio Moraes\\\\Desktop\\\\janainamoda\\\\apps\\\\api\"; $env:NODE_OPTIONS='--max-old-space-size=768'; npx jest \"products.service.spec\" --no-coverage --forceExit --runInBand 2>&1 | Select-Object -Last 25)"
     ]
   }
 }

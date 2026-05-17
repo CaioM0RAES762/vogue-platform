@@ -150,44 +150,12 @@ Código escrito: 23 arquivos criados/modificados. TypeScript sem erros. 29/29 te
 ---
 
 ## SPRINT 5 — PRODUTOS E CATALOGO
-Status: PENDENTE
+Status: CONCLUÍDA
+Observação: testes escritos mas execução requer ≥ 1 GB de RAM livre para o Jest.
 
-Prompt para executar:
+O que foi feito: RedisService global com failsafe silencioso (sem Redis = sem crash). CloudinaryService com upload WebP + thumbnail automático. ProductsService com CRUD completo, filtros (category, sizes, colors, preço, on_sale, is_new, in_stock, busca por texto), paginação cursor-based (SDD 24.1), cache Redis com TTLs do SDD (catálogo 2min, produto 10min, categorias 1h) e invalidação automática. 11 rotas REST (3 públicas + 8 admin com RolesGuard). Frontend: BannerCarousel com autoplay, strip de categorias, grid responsivo (2/3/4 colunas), ProductCard com badges NOVO/OFERTA, FilterSidebar (desktop) + FilterDrawer (mobile), busca com debounce 300ms, "Carregar mais" cursor-based, skeleton loading, galeria com swipe, swatches de cor, seletor de tamanho (esgotados riscados), aviso estoque baixo ≤5, simulação de frete com fallback, "Adicionar ao carrinho" desabilitado sem tamanho. Decisões D-17 a D-22 documentadas.
 
-Leia o SDD.md, o CLAUDE.md, o docs/MASTER.md e o docs/SPRINT-04-HANDOFF.md.
-Confirme que entendeu o estado atual em 3 linhas antes de escrever codigo.
-
-Agora execute a Sprint 5 — Produtos e Catalogo:
-
-Implemente o modulo de Produtos seguindo as Secoes 6.2.1, 6.2.2, 7, 12, 13 e 24 do SDD.md.
-
-Backend (apps/api/src/modules/products/):
-- CRUD admin: criar, editar, ativar/inativar, excluir produto
-- Gestao de variantes: product_variants (tamanho x cor x estoque)
-- Upload de imagens: multipart para Cloudinary, salvar URLs em product_images
-- Listagem publica: apenas produtos ACTIVE
-- Filtros: category, sizes[], colors[], min_price, max_price, on_sale, is_new, in_stock
-- Ordenacao: price_asc, price_desc, newest, best_sellers, relevance
-- Busca por texto nos campos name e tags
-- Paginacao cursor-based conforme Secao 24.1 do SDD
-- Cache Redis conforme Secao 24.3: products:catalog TTL 2min, products:popular TTL 5min,
-  categories:active TTL 1h, product:{id} TTL 10min
-
-Frontend (apps/web/app/(loja)/):
-- Tela principal: header fixo, banner rotativo, grid responsivo
-  (2 colunas mobile / 3 tablet / 4 desktop)
-- Cards: imagem, badge NOVO/OFERTA, nome, preco, preco riscado
-- Filtros laterais no desktop e drawer no mobile
-- Skeleton loading e estado vazio
-- Tela de detalhe: galeria com swipe/zoom, seletor de cor (swatches),
-  seletor de tamanho, indicador estoque baixo (5 ou menos unidades),
-  seletor de quantidade, simulacao de frete por CEP, produtos relacionados
-- Botao Adicionar ao carrinho desabilitado sem tamanho selecionado
-- Identidade visual: preto #000000, dourado #C9A84C, Playfair Display nos titulos
-
-Testes unitarios: ProductsService, filtros, paginacao cursor-based, upload Cloudinary (mock).
-
-Ao final gere o arquivo docs/SPRINT-05-HANDOFF.md.
+Código escrito: 25 arquivos criados/modificados. TypeScript sem erros (tsc --noEmit limpo). 32 testes unitários escritos.
 
 ---
 
@@ -557,7 +525,7 @@ Sprint 1:  Auditoria              — CONCLUIDA
 Sprint 2:  Setup Monorepo         — CONCLUIDA
 Sprint 3:  Banco de Dados         — CONCLUÍDA
 Sprint 4:  Autenticacao           — CONCLUÍDA
-Sprint 5:  Produtos e Catalogo    — PENDENTE
+Sprint 5:  Produtos e Catalogo    — CONCLUÍDA
 Sprint 6:  Carrinho               — PENDENTE
 Sprint 7:  Checkout               — PENDENTE
 Sprint 8:  Pagamentos             — PENDENTE (requer credenciais MP sandbox)

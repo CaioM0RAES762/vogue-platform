@@ -40,6 +40,18 @@ class EnvironmentVariables {
   @IsString()
   @IsOptional()
   FRONTEND_URL: string = 'http://localhost:3000';
+
+  @IsString()
+  @IsOptional()
+  CLOUDINARY_CLOUD_NAME: string = '';
+
+  @IsString()
+  @IsOptional()
+  CLOUDINARY_API_KEY: string = '';
+
+  @IsString()
+  @IsOptional()
+  CLOUDINARY_API_SECRET: string = '';
 }
 
 export function validateEnv(config: Record<string, unknown>) {
