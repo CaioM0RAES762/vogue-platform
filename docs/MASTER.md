@@ -130,40 +130,14 @@ Status: CONCLUIDA
 O que foi feito: Monorepo pnpm configurado com apps/web (Next.js 14 + Tailwind + Shadcn/UI + tema preto/dourado + rotas loja/auth/admin), apps/api (NestJS + Prisma + Winston + Helmet + CORS + ValidationPipe + healthcheck) e packages/shared (enums e types compartilhados). Infraestrutura com docker-compose PostgreSQL 16 + Redis 7. Decisões D-01 a D-10 documentadas em docs/DECISIONS.md. Handoff completo em docs/SPRINT-02-HANDOFF.md.
 
 ## SPRINT 3 — BANCO DE DADOS
-Status: PENDENTE
+Status: CONCLUÍDA
+Observação: migration pendente — requer Docker Desktop/PostgreSQL.
 
-Prompt para executar:
+O que foi feito: Schema Prisma completo implementado com todos os enums, models do SDD, models adicionais (refresh_tokens, password_reset_tokens, audit_logs, coupon_usages), relacionamentos, campos únicos, timestamps e índices. Seed inicial criado com admin via .env e categorias base. Enums compartilhados alinhados ao SDD. Decisões D-11 e D-12 documentadas. Handoff completo em docs/SPRINT-03-HANDOFF.md.
 
-Leia o SDD.md, o CLAUDE.md, o docs/MASTER.md e o docs/SPRINT-02-HANDOFF.md.
-Confirme que entendeu o estado atual em 3 linhas antes de escrever codigo.
+Código escrito: Schema Prisma, seed inicial, ajustes em enums compartilhados e documentação.
 
-Agora execute a Sprint 3 — Banco de Dados:
-
-Implemente o schema Prisma completo seguindo a Secao 12 do SDD.md
-e as decisoes D-01, D-02 e D-04 do MASTER.md.
-
-1. prisma/schema.prisma com:
-   - Todos os enums: UserRole, ProductStatus, Gender, ProductSize,
-     CouponType, OrderStatus, PaymentMethod, PaymentStatus, InventoryMovementType
-   - Models do SDD: User, UserAddress, Category, Product, ProductImage,
-     ProductVariant, Cart, CartItem, Coupon, Order, OrderItem,
-     Payment, InventoryMovement, OrderStatusHistory
-   - Models adicionais obrigatorios (D-04): password_reset_tokens, audit_logs, coupon_usages
-   - Model adicional (D-02): refresh_tokens
-   - Todos os relacionamentos, indices da Secao 24.5, campos unicos e timestamps
-   - Campo phone obrigatorio em User (D-06)
-
-2. Seed inicial:
-   - Admin via .env (ADMIN_EMAIL, ADMIN_PASSWORD)
-   - Categorias base: Vestidos, Blusas, Calcas, Saias, Conjuntos, Acessorios
-
-3. Rodar: prisma validate, prisma generate, prisma migrate dev --name init
-
-4. Se encontrar inconsistencia entre tabelas e regras de negocio:
-   pare, documente em docs/DECISIONS.md e so entao continue.
-
-Ao final gere o arquivo docs/SPRINT-03-HANDOFF.md.
-
+Validações: prisma validate e prisma generate concluídos com sucesso. prisma migrate dev --name init pendente por falta de Docker/PostgreSQL.
 ---
 
 ## SPRINT 4 — AUTENTICACAO
@@ -616,7 +590,7 @@ Confirme que entendeu e continue de onde parou.
 Sprint 0:  CLAUDE.md              — CONCLUIDA
 Sprint 1:  Auditoria              — CONCLUIDA
 Sprint 2:  Setup Monorepo         — CONCLUIDA
-Sprint 3:  Banco de Dados         — PENDENTE
+Sprint 3:  Banco de Dados         — CONCLUÍDA
 Sprint 4:  Autenticacao           — PENDENTE
 Sprint 5:  Produtos e Catalogo    — PENDENTE
 Sprint 6:  Carrinho               — PENDENTE

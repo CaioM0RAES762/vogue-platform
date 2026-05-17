@@ -126,3 +126,42 @@ Não questionar nem reimplementar diferente — já foram decididas e documentad
 **Motivo:** Mercado Pago pode não enviar webhook de expiração em alguns cenários. O cron garante consistência do estoque e dos pedidos sem depender exclusivamente de webhooks.
 
 **Impacto:** Sprint 8 implementa `CancelExpiredOrdersJob` no módulo de pagamentos.
+
+**Nota Sprint 3:** Campo `expires_at` adicionado à tabela `orders` — não consta na Seção 12 do SDD, mas é exigido pela lógica de D-10. Documentado abaixo em D-12.
+
+---
+
+## D-11 — ENUMS: Alinhamento Sprint 2 vs SDD
+
+**Data:** 2026-05-16 | **Sprint:** 3
+
+**Decisão:** Atualizar os enums de `packages/shared/src/enums/index.ts` para corresponder exatamente aos valores definidos na Seção 12 do SDD. Os enums da Sprint 2 tinham divergências.
+
+**Divergências corrigidas:**
+
+| Enum | Sprint 2 (incorreto) | SDD / Sprint 3 (correto) |
+|---|---|---|
+| `Gender` | `FEMALE`, `UNISEX` (inglês, sem MASCULINO) | `FEMININO`, `MASCULINO`, `UNISSEX` |
+| `ProductSize` | `XGG` (errado), sem `ÚNICO` | `XG`, `UNICO` (sem acento — limitação Prisma) |
+| `InventoryMovementType` | `PURCHASE`, `ADJUSTMENT`, `RETURN` | `ENTRY`, `MANUAL_EXIT`, `RESERVATION`, `RELEASE` |
+| `PaymentStatus` | tinha `EXPIRED` (não no SDD) | mantido `EXPIRED` — ver nota |
+
+**Nota sobre `PaymentStatus.EXPIRED`:** O SDD (Seção 12) não lista `EXPIRED` na tabela de `payments`, mas a lógica de D-10 (cancelar PIX/Boleto expirado) e a realidade do Mercado Pago exigem distinguir pagamento expirado de cancelado. Mantido em conformidade com a Sprint 2 e documentado.
+
+**Nota sobre `ProductSize.UNICO`:** Prisma não suporta caracteres especiais (acento) em nomes de enum. O valor `ÚNICO` do SDD é representado como `UNICO` no banco e no código. A camada de UI deve traduzir `UNICO` para `Único` na exibição.
+
+**Motivo:** SDD é fonte da verdade. Os valores divergentes da Sprint 2 causariam inconsistências nos DTOs e na lógica de negócio das sprints seguintes.
+
+**Impacto:** Sprint 3 atualiza `packages/shared` e `schema.prisma`. Nenhum código de negócio existente usa esses enums ainda.
+
+---
+
+## D-12 — CAMPO `orders.expires_at`: Adição não documentada no SDD
+
+**Data:** 2026-05-16 | **Sprint:** 3
+
+**Decisão:** Adicionar o campo `expires_at TIMESTAMP NULL` à tabela `orders`.
+
+**Motivo:** A decisão D-10 especifica que o cron job busca "pedidos PENDING com `expires_at` menor que `now()`". O campo não está na Seção 12 do SDD, mas é indispensável para o comportamento descrito. Sem ele, seria necessário fazer JOIN com `payments.expires_at`, adicionando complexidade desnecessária ao cron job.
+
+**Impacto:** Sprint 3 inclui o campo no schema. Sprint 8 preenche `expires_at` ao criar pedidos de PIX (30min) e Boleto (3 dias úteis).

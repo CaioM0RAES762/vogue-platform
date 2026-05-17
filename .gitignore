@@ -43,3 +43,7 @@ Thumbs.db
 
 # sentry
 .sentryclirc
+
+# docs
+SDD.md
+CLAUDE.md

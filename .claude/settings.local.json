@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm install *)",
+      "PowerShell(Get-Command node -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-Command npm -ErrorAction SilentlyContinue)",
+      "PowerShell($env:PATH)",
+      "PowerShell(Get-Command pnpm -ErrorAction SilentlyContinue)",
+      "PowerShell(npm list -g pnpm --depth=0 2>&1)",
+      "PowerShell($env:PATH = $env:PATH + \";C:\\\\Users\\\\Caio Moraes\\\\AppData\\\\Roaming\\\\npm\"; pnpm --version 2>&1)",
+      "PowerShell($env:PATH = $env:PATH + \";C:\\\\Users\\\\Caio Moraes\\\\AppData\\\\Roaming\\\\npm\"; Set-Location \"c:\\\\Users\\\\Caio Moraes\\\\Desktop\\\\janainamoda\"; pnpm install 2>&1)",
+      "PowerShell($env:PATH = $env:PATH + \";C:\\\\Users\\\\Caio Moraes\\\\AppData\\\\Roaming\\\\npm\"; Set-Location \"c:\\\\Users\\\\Caio Moraes\\\\Desktop\\\\janainamoda\"; pnpm approve-builds 2>&1)",
+      "PowerShell($env:PATH = $env:PATH + \";C:\\\\Users\\\\Caio Moraes\\\\AppData\\\\Roaming\\\\npm\"; Set-Location \"c:\\\\Users\\\\Caio Moraes\\\\Desktop\\\\janainamoda\"; pnpm install --force 2>&1)",
+      "PowerShell($env:PATH = $env:PATH + \";C:\\\\Users\\\\Caio Moraes\\\\AppData\\\\Roaming\\\\npm\"; Set-Location \"c:\\\\Users\\\\Caio Moraes\\\\Desktop\\\\janainamoda\"; Remove-Item \"pnpm-lock.yaml\" -ErrorAction SilentlyContinue; pnpm install 2>&1)",
+      "PowerShell($env:PATH = $env:PATH + \";C:\\\\Users\\\\Caio Moraes\\\\AppData\\\\Roaming\\\\npm\"; Set-Location \"c:\\\\Users\\\\Caio Moraes\\\\Desktop\\\\janainamoda\"; pnpm rebuild 2>&1)",
+      "PowerShell($env:PATH = $env:PATH + \";C:\\\\Users\\\\Caio Moraes\\\\AppData\\\\Roaming\\\\npm\"; Set-Location \"c:\\\\Users\\\\Caio Moraes\\\\Desktop\\\\janainamoda\\\\apps\\\\api\"; .\\\\node_modules\\\\.bin\\\\prisma --version 2>&1)",
+      "PowerShell($env:PATH = $env:PATH + \";C:\\\\Users\\\\Caio Moraes\\\\AppData\\\\Roaming\\\\npm\"; Set-Location \"c:\\\\Users\\\\Caio Moraes\\\\Desktop\\\\janainamoda\\\\apps\\\\api\"; node -e \"const bcrypt = require\\('bcrypt'\\); console.log\\('bcrypt ok, version:', bcrypt.getRounds ? 'native' : 'js'\\)\" 2>&1)",
+      "PowerShell($env:PATH = $env:PATH + \";C:\\\\Users\\\\Caio Moraes\\\\AppData\\\\Roaming\\\\npm\"; Set-Location \"c:\\\\Users\\\\Caio Moraes\\\\Desktop\\\\janainamoda\"; pnpm --filter api rebuild bcrypt 2>&1)",
+      "PowerShell($env:PATH = $env:PATH + \";C:\\\\Users\\\\Caio Moraes\\\\AppData\\\\Roaming\\\\npm\"; Set-Location \"c:\\\\Users\\\\Caio Moraes\\\\Desktop\\\\janainamoda\\\\apps\\\\api\"; node -e \"const b = require\\('bcrypt'\\); b.hash\\('test', 12\\).then\\(h => console.log\\('bcrypt ok:', h.substring\\(0,10\\)\\)\\)\" 2>&1)",
+      "PowerShell($env:PATH = $env:PATH + \";C:\\\\Users\\\\Caio Moraes\\\\AppData\\\\Roaming\\\\npm\"; Set-Location \"c:\\\\Users\\\\Caio Moraes\\\\Desktop\\\\janainamoda\\\\apps\\\\api\"; .\\\\node_modules\\\\.bin\\\\prisma validate --schema=prisma/schema.prisma 2>&1)",
+      "PowerShell($env:PATH = $env:PATH + \";C:\\\\Users\\\\Caio Moraes\\\\AppData\\\\Roaming\\\\npm\"; $env:DATABASE_URL = \"postgresql://janaina:janaina123@localhost:5432/janaina_modas\"; Set-Location \"c:\\\\Users\\\\Caio Moraes\\\\Desktop\\\\janainamoda\\\\apps\\\\api\"; .\\\\node_modules\\\\.bin\\\\prisma validate --schema=prisma/schema.prisma 2>&1)",
+      "PowerShell($env:PATH = $env:PATH + \";C:\\\\Users\\\\Caio Moraes\\\\AppData\\\\Roaming\\\\npm\"; $env:DATABASE_URL = \"postgresql://janaina:janaina123@localhost:5432/janaina_modas\"; Set-Location \"c:\\\\Users\\\\Caio Moraes\\\\Desktop\\\\janainamoda\\\\apps\\\\api\"; .\\\\node_modules\\\\.bin\\\\prisma generate --schema=prisma/schema.prisma 2>&1)",
+      "PowerShell(Test-NetConnection -ComputerName localhost -Port 5432 -WarningAction SilentlyContinue)",
+      "PowerShell($conn = New-Object System.Net.Sockets.TcpClient; try { $conn.Connect\\(\"localhost\", 5432\\); \"PostgreSQL: porta 5432 ABERTA\" } catch { \"PostgreSQL: porta 5432 FECHADA\" } finally { $conn.Close\\(\\) })"
+    ]
+  }
+}
