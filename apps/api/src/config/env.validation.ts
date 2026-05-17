@@ -18,20 +18,28 @@ class EnvironmentVariables {
   APP_PORT: number = 3001;
 
   @IsString()
-  DATABASE_URL: string;
+  DATABASE_URL!: string;
 
   @IsString()
   @IsOptional()
   REDIS_URL: string = 'redis://localhost:6379';
 
   @IsString()
-  JWT_SECRET: string;
+  JWT_SECRET!: string;
 
   @IsString()
-  REFRESH_TOKEN_SECRET: string;
+  REFRESH_TOKEN_SECRET!: string;
 
   @IsString()
-  COOKIE_SECRET: string;
+  COOKIE_SECRET!: string;
+
+  @IsString()
+  @IsOptional()
+  RESEND_API_KEY: string = '';
+
+  @IsString()
+  @IsOptional()
+  FRONTEND_URL: string = 'http://localhost:3000';
 }
 
 export function validateEnv(config: Record<string, unknown>) {

@@ -138,49 +138,14 @@ O que foi feito: Schema Prisma completo implementado com todos os enums, models 
 Código escrito: Schema Prisma, seed inicial, ajustes em enums compartilhados e documentação.
 
 Validações: prisma validate e prisma generate concluídos com sucesso. prisma migrate dev --name init pendente por falta de Docker/PostgreSQL.
----
 
 ## SPRINT 4 — AUTENTICACAO
-Status: PENDENTE
+Status: CONCLUÍDA
 
-Prompt para executar:
+O que foi feito: Módulo de autenticação completo. Backend: DTOs com class-validator, validação de CPF (dígito verificador), JwtStrategy, JwtAuthGuard, RolesGuard, @CurrentUser(), @Roles(), AuthService (register/login/logout/refresh/forgotPassword/resetPassword), AuthController com rate limiting via ThrottlerModule, MailService (Resend). Refresh token SHA-256 no banco (D-02). Phone obrigatório (D-06). Resposta genérica no login e forgotPassword. cookie-parser integrado ao main.ts. Frontend: AuthProvider (contexto + sessionStorage), api.ts (cliente HTTP), middleware de proteção de rotas, telas login/cadastro (CPF maskado + indicador força senha)/recuperar-senha/redefinir-senha com Zod + react-hook-form. 29 testes unitários passando. Decisões D-13 a D-16 documentadas.
 
-Leia o SDD.md, o CLAUDE.md, o docs/MASTER.md e o docs/SPRINT-03-HANDOFF.md.
-Confirme que entendeu o estado atual em 3 linhas antes de escrever codigo.
+Código escrito: 23 arquivos criados/modificados. TypeScript sem erros. 29/29 testes passando.
 
-Agora execute a Sprint 4 — Autenticacao:
-
-Implemente o modulo de Autenticacao seguindo as Secoes 6.1, 7 e 17 do SDD.md
-e as decisoes D-02, D-03, D-06 do MASTER.md.
-
-Backend (apps/api/src/modules/auth/):
-- Registro: nome, e-mail, CPF com validacao de digito verificador,
-  telefone obrigatorio (D-06), senha, aceite de termos
-- Login com resposta generica (nao revelar qual campo esta errado)
-- JWT access token 15min em memoria
-- Refresh token em cookie HttpOnly 7 dias com rotacao
-  armazenado na tabela refresh_tokens como hash SHA-256 (D-02)
-- Logout: invalida refresh token no banco e limpa cookie
-- Forgot password: gera token UUID na tabela password_reset_tokens TTL 1h via Resend
-- Reset password: valida token, troca senha, invalida todos refresh tokens do usuario
-- Rate limit: 5 tentativas de login por IP em 15 minutos com @nestjs/throttler + Redis store
-- Guard JwtAuthGuard, decorator @CurrentUser(), decorator @Roles()
-- Roles: USER e ADMIN
-
-Frontend (apps/web/app/(auth)/):
-- Tela de login com validacao em tempo real
-- Tela de cadastro com indicador de forca de senha e validacao de CPF
-- Tela de recuperacao de senha
-- Redirecionamento pos-login: USER para /loja, ADMIN para /admin/dashboard
-
-Testes unitarios em apps/api/src/modules/auth/auth.service.spec.ts:
-- AuthService: registro, login, logout, refresh
-- Validacao de CPF (algoritmo digito verificador)
-- Login com credenciais invalidas
-- Rate limit (mock do throttler)
-- Role guard
-
-Ao final gere o arquivo docs/SPRINT-04-HANDOFF.md.
 
 ---
 
@@ -591,7 +556,7 @@ Sprint 0:  CLAUDE.md              — CONCLUIDA
 Sprint 1:  Auditoria              — CONCLUIDA
 Sprint 2:  Setup Monorepo         — CONCLUIDA
 Sprint 3:  Banco de Dados         — CONCLUÍDA
-Sprint 4:  Autenticacao           — PENDENTE
+Sprint 4:  Autenticacao           — CONCLUÍDA
 Sprint 5:  Produtos e Catalogo    — PENDENTE
 Sprint 6:  Carrinho               — PENDENTE
 Sprint 7:  Checkout               — PENDENTE

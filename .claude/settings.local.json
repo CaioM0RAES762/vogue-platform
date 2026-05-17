@@ -21,7 +21,13 @@
       "PowerShell($env:PATH = $env:PATH + \";C:\\\\Users\\\\Caio Moraes\\\\AppData\\\\Roaming\\\\npm\"; $env:DATABASE_URL = \"postgresql://janaina:janaina123@localhost:5432/janaina_modas\"; Set-Location \"c:\\\\Users\\\\Caio Moraes\\\\Desktop\\\\janainamoda\\\\apps\\\\api\"; .\\\\node_modules\\\\.bin\\\\prisma validate --schema=prisma/schema.prisma 2>&1)",
       "PowerShell($env:PATH = $env:PATH + \";C:\\\\Users\\\\Caio Moraes\\\\AppData\\\\Roaming\\\\npm\"; $env:DATABASE_URL = \"postgresql://janaina:janaina123@localhost:5432/janaina_modas\"; Set-Location \"c:\\\\Users\\\\Caio Moraes\\\\Desktop\\\\janainamoda\\\\apps\\\\api\"; .\\\\node_modules\\\\.bin\\\\prisma generate --schema=prisma/schema.prisma 2>&1)",
       "PowerShell(Test-NetConnection -ComputerName localhost -Port 5432 -WarningAction SilentlyContinue)",
-      "PowerShell($conn = New-Object System.Net.Sockets.TcpClient; try { $conn.Connect\\(\"localhost\", 5432\\); \"PostgreSQL: porta 5432 ABERTA\" } catch { \"PostgreSQL: porta 5432 FECHADA\" } finally { $conn.Close\\(\\) })"
+      "PowerShell($conn = New-Object System.Net.Sockets.TcpClient; try { $conn.Connect\\(\"localhost\", 5432\\); \"PostgreSQL: porta 5432 ABERTA\" } catch { \"PostgreSQL: porta 5432 FECHADA\" } finally { $conn.Close\\(\\) })",
+      "Bash(pnpm --filter api add @nestjs/jwt @nestjs/passport passport passport-jwt @nestjs/throttler ioredis cookie-parser uuid resend)",
+      "Bash(pnpm --filter api add -D @types/passport-jwt @types/passport @types/cookie-parser @types/uuid)",
+      "Bash(pnpm --filter web add react-hook-form @hookform/resolvers)",
+      "Bash(pnpm --filter api exec tsc --noEmit)",
+      "Bash(pnpm --filter api test -- --testPathPattern=\"auth.service.spec\" --no-coverage)",
+      "Bash(npx jest *)"
     ]
   }
 }

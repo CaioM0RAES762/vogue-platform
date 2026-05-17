@@ -3,6 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { WinstonModule } from 'nest-winston';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { winstonConfig } from './common/logger/winston.logger';
 
@@ -16,6 +17,7 @@ async function bootstrap() {
   const frontendUrl = configService.get<string>('FRONTEND_URL', 'http://localhost:3000');
 
   app.use(helmet());
+  app.use(cookieParser(configService.get<string>('COOKIE_SECRET')));
 
   app.enableCors({
     origin: frontendUrl,
