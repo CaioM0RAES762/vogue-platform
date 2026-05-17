@@ -12,6 +12,7 @@ import { RedisModule } from './modules/redis/redis.module';
 import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 import { ProductsModule } from './modules/products/products.module';
 import { CartModule } from './modules/cart/cart.module';
+import { CheckoutModule } from './modules/checkout/checkout.module';
 import { AppController } from './app.controller';
 
 @Module({
@@ -33,6 +34,7 @@ import { AppController } from './app.controller';
     AuthModule,
     ProductsModule,
     CartModule,
+    CheckoutModule,
   ],
 })
 export class AppModule {}

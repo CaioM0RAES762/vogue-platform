@@ -52,6 +52,18 @@ class EnvironmentVariables {
   @IsString()
   @IsOptional()
   CLOUDINARY_API_SECRET: string = '';
+
+  @IsString()
+  @IsOptional()
+  MELHOR_ENVIO_TOKEN: string = '';
+
+  @IsString()
+  @IsOptional()
+  STORE_CEP: string = '01310100';
+
+  @IsString()
+  @IsOptional()
+  FALLBACK_SHIPPING_PRICE: string = '15.00';
 }
 
 export function validateEnv(config: Record<string, unknown>) {

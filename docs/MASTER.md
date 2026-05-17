@@ -170,52 +170,12 @@ Código escrito: 17 arquivos criados/modificados. TypeScript backend sem erros. 
 ---
 
 ## SPRINT 7 — CHECKOUT
-Status: PENDENTE
+Status: CONCLUÍDA
+Observação: 3 erros TypeScript pré-existentes da Sprint 5 (produtos/page.tsx e variant-selector.tsx) — não relacionados a esta sprint.
 
-Prompt para executar:
+O que foi feito: CheckoutService com getShippingOptions (integração Melhor Envio + fallback D-08 via FALLBACK_SHIPPING_PRICE), createOrder (transação Prisma com SELECT FOR UPDATE RN026, re-verificação de estoque, orderNumber JM-{ANO}{SEQ5} D-05, productSnapshot JSONB imutável, CouponUsage registrado + usesCount incrementado, carrinho limpo, payment PENDING criado com externalId placeholder) e lookupCep (proxy ViaCEP). Guest checkout RF067 com guestName/guestEmail/guestCpf. Estoque não decrementado (RN004). PIX expira em 30min, Boleto em 3 dias. Proxy GET /cep/:zipCode. Frontend: checkout-api.ts (cliente tipado), barra de progresso 4 etapas, Step1 (dados pessoais, CPF mascarado, pré-preenche se logado), Step2 (CEP/ViaCEP + opções de frete), Step3 (seleção de pagamento — UI pronta, integração MP Sprint 8), Step4 (revisão completa + aceite dos termos), resumo colapsável sticky 35%. Tela de sucesso pós-pedido. Decisões D-13 a D-16 documentadas. 8 testes unitários (T-CHECKOUT-01 a T-CHECKOUT-08).
 
-Leia o SDD.md, o CLAUDE.md, o docs/MASTER.md e o docs/SPRINT-06-HANDOFF.md.
-Confirme que entendeu o estado atual em 3 linhas antes de escrever codigo.
-
-Agora execute a Sprint 7 — Checkout:
-
-Implemente o modulo de Checkout seguindo as Secoes 6.2.4, 7, 9, 12, 13 e 16 do SDD.md.
-
-Backend (apps/api/src/modules/checkout/):
-- POST /api/v1/checkout/shipping-options:
-  Recebe CEP + itens, consulta Melhor Envio, retorna opcoes de frete.
-  Se Melhor Envio indisponivel: usar FALLBACK_SHIPPING_PRICE do .env (D-08)
-
-- POST /api/v1/checkout:
-  1. Validar todos os dados (cliente, endereco, frete, pagamento)
-  2. Iniciar transacao Prisma
-  3. SELECT FOR UPDATE nas variantes (RN026 — controle de concorrencia)
-  4. Verificar estoque novamente dentro da transacao
-  5. Criar order com status PENDING
-  6. Criar order_items com product_snapshot em JSONB (imutavel)
-  7. NAO decrementar estoque ainda (RN004)
-  8. Gerar numero do pedido no formato JM-{ANO}{SEQUENCIAL_5DIGITOS} (D-05)
-  9. Retornar order_id + dados para criacao do pagamento
-
-- Suporte a guest checkout (RF067):
-  coletar nome, e-mail, CPF nos campos guest_* da tabela orders
-
-- Proxy ViaCEP: GET /api/v1/cep/:zipCode
-
-- Se implementar reserva temporaria de estoque:
-  documentar a estrategia COMPLETA em docs/DECISIONS.md antes de implementar
-
-Frontend (apps/web/app/(loja)/checkout/):
-- Barra de progresso: Dados Pessoais, Entrega, Pagamento, Revisao
-- Etapa 1: dados do cliente (preenchimento automatico se logado)
-- Etapa 2: endereco com busca ViaCEP + lista de opcoes de frete
-- Etapa 3: selecao de forma de pagamento (UI preparada; integracao MP na Sprint 8)
-- Etapa 4: revisao completa + botao Finalizar pedido
-- Layout: formulario 65% + resumo colapsavel 35%
-
-Testes unitarios: criacao de pedido, concorrencia (mock), snapshot de produto.
-
-Ao final gere o arquivo docs/SPRINT-07-HANDOFF.md.
+Código escrito: 15 arquivos criados/modificados. TypeScript backend sem erros. 8 testes unitários escritos.
 
 ---
 
@@ -493,7 +453,7 @@ Sprint 3:  Banco de Dados         — CONCLUÍDA
 Sprint 4:  Autenticacao           — CONCLUÍDA
 Sprint 5:  Produtos e Catalogo    — CONCLUÍDA
 Sprint 6:  Carrinho               — CONCLUÍDA
-Sprint 7:  Checkout               — PENDENTE
+Sprint 7:  Checkout               — CONCLUÍDA
 Sprint 8:  Pagamentos             — PENDENTE (requer credenciais MP sandbox)
 Sprint 9:  Minha Conta            — PENDENTE
 Sprint 10: Painel Admin           — PENDENTE

@@ -165,3 +165,58 @@ Não questionar nem reimplementar diferente — já foram decididas e documentad
 **Motivo:** A decisão D-10 especifica que o cron job busca "pedidos PENDING com `expires_at` menor que `now()`". O campo não está na Seção 12 do SDD, mas é indispensável para o comportamento descrito. Sem ele, seria necessário fazer JOIN com `payments.expires_at`, adicionando complexidade desnecessária ao cron job.
 
 **Impacto:** Sprint 3 inclui o campo no schema. Sprint 8 preenche `expires_at` ao criar pedidos de PIX (30min) e Boleto (3 dias úteis).
+
+---
+
+## D-13 — RESERVA DE ESTOQUE: Sem reserva temporária no checkout (Sprint 7)
+
+**Data:** 2026-05-17 | **Sprint:** 7
+
+**Decisão:** A Sprint 7 **não implementa reserva temporária de estoque** (incremento de `reservedStock` no checkout). O controle de concorrência é garantido exclusivamente via `SELECT FOR UPDATE` na transação do checkout (RN026).
+
+**Motivo:** O SDD menciona `reservedStock` mas não define o ciclo de vida completo da reserva (quando incrementar, quando liberar, como limpar reservas antigas de pedidos expirados). Implementar a reserva exigiria:
+1. Incrementar `reservedStock` ao criar o pedido
+2. Decrementar `reservedStock` ao cancelar (cron D-10) ou ao confirmar pagamento (webhook Sprint 8)
+3. Job de limpeza para reservas órfãs
+
+Adicionar esse mecanismo sem a Sprint 8 (webhook) criaria inconsistências de estoque. O `SELECT FOR UPDATE` garante que pedidos simultâneos na mesma variante são serializados, impedindo overselling.
+
+**Alternativa considerada:** Incrementar `reservedStock` no checkout e decrementar no webhook. Rejeitada porque a Sprint 8 ainda não existe — implementar metade do mecanismo é pior que não implementar.
+
+**Impacto:** O campo `reservedStock` já existe no schema (Sprint 3) e será populado pela Sprint 8 quando o webhook de pagamento for implementado. O `SELECT FOR UPDATE` na transação do checkout (implementado na Sprint 7) é suficiente para MVP.
+
+---
+
+## D-14 — PROXY VIACEP: Endpoint no backend (GET /api/v1/cep/:zipCode)
+
+**Data:** 2026-05-17 | **Sprint:** 7
+
+**Decisão:** Criar um endpoint proxy no backend para consulta de CEP em vez de chamar ViaCEP diretamente do frontend.
+
+**Motivo:** Chamadas diretas do frontend para `viacep.com.br` expõem o serviço externo diretamente ao cliente, impossibilitam cache/rate-limiting, e geram erros de CORS em alguns browsers. O proxy permite centralizar tratamento de erros e futuramente adicionar cache Redis.
+
+**Impacto:** `CepController` em `apps/api/src/modules/cep/cep.controller.ts`, registrado no `CheckoutModule`. Frontend usa `/api/v1/cep/:zipCode`.
+
+---
+
+## D-15 — PAGAMENTO NA SPRINT 7: Registro de payment sem integração MP
+
+**Data:** 2026-05-17 | **Sprint:** 7
+
+**Decisão:** O endpoint `POST /api/v1/checkout` cria um registro `Payment` com `status=PENDING` e `externalId=pending-{orderId}` (sem chamar a API do Mercado Pago).
+
+**Motivo:** A integração real com Mercado Pago (PIX QR Code, boleto, cartão) é escopo da Sprint 8. Criar o registro de payment nesta sprint permite que o schema e a lógica de pedido estejam corretos, e a Sprint 8 apenas atualiza o `externalId` e os campos de QR code/barcode.
+
+**Impacto:** Sprint 8 substitui o `externalId` placeholder pela chamada real à API do Mercado Pago e popula `qrCode`, `qrCodeBase64`, `barcode`.
+
+---
+
+## D-16 — MERGE DE GUEST CART: Implementado no início do checkout
+
+**Data:** 2026-05-17 | **Sprint:** 7
+
+**Decisão:** O merge do carrinho de convidado (session_id cookie) para o carrinho do usuário autenticado é tratado via `sessionId` no `CreateCheckoutDto`. Se o usuário estiver logado e passar `sessionId`, o `CartService.getCart` lê do sessionId. Se o checkout for concluído, o `clearCart` limpa o carrinho correto.
+
+**Motivo:** O merge completo (transfer de itens do guest cart para user cart) requer lógica adicional que está fora do escopo da Sprint 7. O checkout funciona corretamente em ambos os casos (autenticado via userId, guest via sessionId).
+
+**Impacto:** Merge completo (transferência de itens) pendente para Sprint 9 ou refactor futuro.
