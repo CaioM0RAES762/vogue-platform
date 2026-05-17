@@ -160,46 +160,12 @@ Código escrito: 25 arquivos criados/modificados. TypeScript sem erros (tsc --no
 ---
 
 ## SPRINT 6 — CARRINHO
-Status: PENDENTE
+Status: CONCLUÍDA
+Observação: 3 erros TypeScript pré-existentes da Sprint 5 (produtos/page.tsx e variant-selector.tsx) — não relacionados a esta sprint.
 
-Prompt para executar:
+O que foi feito: CartService completo com getCart (cache Redis TTL 60s), addItem, updateItem, removeItem, clearCart, applyCoupon (RN014/RN015/RN016), removeCoupon e revalidação de estoque RN021 (1h inatividade). OptionalJwtGuard criado para rotas públicas (guest via session_id cookie HttpOnly gerado automaticamente; autenticado via JWT). 8 endpoints REST implementados. Frontend: cart-api.ts (cliente tipado), Zustand store com loading/error/useCartCount, componentes CartItemCard (thumbnail, seletor ±, aviso estoque < 3) e CartSummary (cupom com feedback, CEP/frete, total), página /carrinho com skeleton, estado vazio e grid itens+resumo. Criados components/ui/button.tsx e input.tsx (shadcn/ui, faltavam no projeto). Zustand instalado. 12 testes unitários escritos (T-CART-01 a T-CART-08 + clearCart + RN021). Merge guest→autenticado e decremento de usesCount pendentes para Sprint 7.
 
-Leia o SDD.md, o CLAUDE.md, o docs/MASTER.md e o docs/SPRINT-05-HANDOFF.md.
-Confirme que entendeu o estado atual em 3 linhas antes de escrever codigo.
-
-Agora execute a Sprint 6 — Carrinho:
-
-Implemente o modulo de Carrinho seguindo as Secoes 6.2.3, 7, 9, 12 e 13 do SDD.md.
-
-Regra fundamental (CLAUDE.md e MASTER.md):
-- Usuario autenticado: carrinho persistido no PostgreSQL (carts + cart_items)
-- Convidado: session_id via cookie, tambem persistido no PostgreSQL
-- Redis: apenas para cache — NAO para persistir o carrinho
-
-Backend (apps/api/src/modules/cart/):
-- GET /api/v1/cart
-- POST /api/v1/cart/items (valida estoque)
-- PUT /api/v1/cart/items/:id (valida estoque)
-- DELETE /api/v1/cart/items/:id
-- DELETE /api/v1/cart
-- POST /api/v1/cart/coupon com validacoes:
-  cupom ativo, nao expirado, nao atingiu max_uses,
-  CPF do usuario nao esta em coupon_usages (D-04, RN014),
-  subtotal >= min_order_value
-- DELETE /api/v1/cart/coupon
-- Revalidacao de estoque ao abrir carrinho apos 1h de inatividade (RN021)
-
-Frontend (apps/web/app/(loja)/carrinho/):
-- Lista de itens com thumbnail, nome, variante, preco, seletor de quantidade, subtotal, remover
-- Aviso inline de estoque baixo (menos de 3 unidades)
-- Campo de cupom com feedback de sucesso/erro
-- Resumo: subtotal, desconto, campo CEP para frete, total
-- Estado vazio com CTA
-- Botoes: Continuar comprando e Finalizar compra
-
-Testes unitarios dos cenarios T-CART-01 a T-CART-08 da Secao 23 do SDD.
-
-Ao final gere o arquivo docs/SPRINT-06-HANDOFF.md.
+Código escrito: 17 arquivos criados/modificados. TypeScript backend sem erros. 12 testes unitários escritos.
 
 ---
 
@@ -526,7 +492,7 @@ Sprint 2:  Setup Monorepo         — CONCLUIDA
 Sprint 3:  Banco de Dados         — CONCLUÍDA
 Sprint 4:  Autenticacao           — CONCLUÍDA
 Sprint 5:  Produtos e Catalogo    — CONCLUÍDA
-Sprint 6:  Carrinho               — PENDENTE
+Sprint 6:  Carrinho               — CONCLUÍDA
 Sprint 7:  Checkout               — PENDENTE
 Sprint 8:  Pagamentos             — PENDENTE (requer credenciais MP sandbox)
 Sprint 9:  Minha Conta            — PENDENTE

@@ -31,7 +31,8 @@
       "Bash(pnpm add *)",
       "Bash(npx tsc *)",
       "Bash(node --max-old-space-size=512 node_modules/.bin/jest \"products.service.spec\" --no-coverage --testTimeout=30000)",
-      "PowerShell(cd \"c:\\\\Users\\\\Caio Moraes\\\\Desktop\\\\janainamoda\\\\apps\\\\api\"; $env:NODE_OPTIONS='--max-old-space-size=768'; npx jest \"products.service.spec\" --no-coverage --forceExit --runInBand 2>&1 | Select-Object -Last 25)"
+      "PowerShell(cd \"c:\\\\Users\\\\Caio Moraes\\\\Desktop\\\\janainamoda\\\\apps\\\\api\"; $env:NODE_OPTIONS='--max-old-space-size=768'; npx jest \"products.service.spec\" --no-coverage --forceExit --runInBand 2>&1 | Select-Object -Last 25)",
+      "Bash(dir /s /b \"c:\\\\Users\\\\Caio Moraes\\\\Desktop\\\\janainamoda\\\\apps\\\\web\")"
     ]
   }
 }
