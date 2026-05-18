@@ -95,9 +95,15 @@ export class PaymentDto {
   @Min(1)
   installments?: number;
 
+  /** Token gerado pelo MP.js no browser — nunca dados brutos do cartão (RN008) */
   @IsString()
   @IsOptional()
   cardToken?: string;
+
+  /** ID do método de pagamento identificado pelo MP.js (ex: visa, master, elo) */
+  @IsString()
+  @IsOptional()
+  paymentMethodId?: string;
 }
 
 export class CreateCheckoutDto {

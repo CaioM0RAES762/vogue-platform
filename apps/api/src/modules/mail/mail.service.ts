@@ -12,6 +12,34 @@ export class MailService {
     this.resend = new Resend(configService.get<string>('RESEND_API_KEY'));
   }
 
+  async sendOrderConfirmed(to: string, orderNumber: string, total: number): Promise<void> {
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL', 'http://localhost:3000');
+    const orderUrl = `${frontendUrl}/minha-conta/pedidos`;
+
+    try {
+      await this.resend.emails.send({
+        from: this.from,
+        to,
+        subject: `Pedido confirmado ${orderNumber} — Janaina Modas`,
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #000000;">Pagamento Confirmado!</h2>
+            <p>Seu pedido <strong>${orderNumber}</strong> foi confirmado com sucesso.</p>
+            <p>Total pago: <strong>R$ ${total.toFixed(2).replace('.', ',')}</strong></p>
+            <p>Em breve você receberá informações sobre o envio.</p>
+            <a href="${orderUrl}"
+               style="display:inline-block;padding:12px 24px;background:#C9A84C;color:#fff;text-decoration:none;border-radius:4px;font-weight:bold;margin:16px 0;">
+              Ver Meus Pedidos
+            </a>
+            <p style="color:#666;font-size:12px;">Obrigada por comprar na Janaina Modas!</p>
+          </div>
+        `,
+      });
+    } catch (error) {
+      this.logger.error('Erro ao enviar e-mail de confirmação de pedido', { to, orderNumber, error });
+    }
+  }
+
   async sendPasswordReset(email: string, rawToken: string): Promise<void> {
     const frontendUrl = this.configService.get<string>('FRONTEND_URL', 'http://localhost:3000');
     const resetUrl = `${frontendUrl}/auth/redefinir-senha?token=${rawToken}`;

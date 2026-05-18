@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { WinstonModule } from 'nest-winston';
+import { BullModule } from '@nestjs/bull';
 
 import { appConfig } from './config/app.config';
 import { validateEnv } from './config/env.validation';
@@ -13,6 +14,7 @@ import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 import { ProductsModule } from './modules/products/products.module';
 import { CartModule } from './modules/cart/cart.module';
 import { CheckoutModule } from './modules/checkout/checkout.module';
+import { PaymentsModule } from './modules/payments/payments.module';
 import { AppController } from './app.controller';
 
 @Module({
@@ -28,6 +30,13 @@ import { AppController } from './app.controller';
     ThrottlerModule.forRoot([
       { name: 'default', ttl: 60_000, limit: 100 },
     ]),
+    // Bull com Redis para filas (emailQueue, cancelExpiredOrders)
+    BullModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        redis: config.get<string>('REDIS_URL', 'redis://localhost:6379'),
+      }),
+    }),
     PrismaModule,
     RedisModule,
     CloudinaryModule,
@@ -35,6 +44,7 @@ import { AppController } from './app.controller';
     ProductsModule,
     CartModule,
     CheckoutModule,
+    PaymentsModule,
   ],
 })
 export class AppModule {}

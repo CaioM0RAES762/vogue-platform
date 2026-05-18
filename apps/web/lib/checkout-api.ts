@@ -73,7 +73,10 @@ export interface CheckoutAddress {
 export interface CheckoutPayment {
   method: 'PIX' | 'CREDIT_CARD' | 'DEBIT_CARD' | 'BOLETO';
   installments?: number;
+  /** Token gerado pelo MP.js — nunca dados brutos do cartão (RN008) */
   cardToken?: string;
+  /** ID do método identificado pelo MP.js (visa, master, elo...) */
+  paymentMethodId?: string;
 }
 
 export interface CreateCheckoutPayload {
@@ -90,9 +93,11 @@ export interface CheckoutResult {
   orderNumber: string;
   payment: {
     method: string;
+    externalId?: string;
     qrCode?: string;
     qrCodeBase64?: string;
     barcode?: string;
+    boletoUrl?: string;
     expiresAt?: string;
   };
 }

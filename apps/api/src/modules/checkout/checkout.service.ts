@@ -9,6 +9,7 @@ import { PaymentMethod } from '@prisma/client';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { CartService } from '../cart/cart.service';
+import { PaymentsService } from '../payments/payments.service';
 import { CreateCheckoutDto } from './dto/create-checkout.dto';
 import { ShippingOptionsDto } from './dto/shipping-options.dto';
 
@@ -24,9 +25,11 @@ export interface CheckoutResult {
   orderNumber: string;
   payment: {
     method: PaymentMethod;
+    externalId?: string;
     qrCode?: string;
     qrCodeBase64?: string;
     barcode?: string;
+    boletoUrl?: string;
     expiresAt?: string;
   };
 }
@@ -41,6 +44,7 @@ export class CheckoutService {
     private readonly prisma: PrismaService,
     private readonly cart: CartService,
     private readonly config: ConfigService,
+    private readonly payments: PaymentsService,
   ) {}
 
   // ─────────────────────────────────────────────
@@ -340,8 +344,8 @@ export class CheckoutService {
       return newOrder;
     });
 
-    // 11. Criar registro de pagamento pendente (sem integração MP — Sprint 8)
-    const paymentRecord = await this.prisma.payment.create({
+    // 11. Criar registro de pagamento placeholder (será atualizado pelo PaymentsService)
+    await this.prisma.payment.create({
       data: {
         orderId: order.id,
         externalId: `pending-${order.id}`,
@@ -353,12 +357,33 @@ export class CheckoutService {
       },
     });
 
+    // 12. Criar pagamento no Mercado Pago e atualizar o registro
+    const payerName = userId
+      ? (await this.prisma.user.findUnique({ where: { id: userId }, select: { name: true } }))?.name ?? dto.customer.name
+      : dto.customer.name;
+
+    const mpResult = await this.payments.createPayment({
+      orderId: order.id,
+      method: dto.payment.method,
+      payerEmail: dto.customer.email,
+      payerName,
+      payerCpf: dto.customer.cpf,
+      cardToken: dto.payment.cardToken,
+      paymentMethodId: dto.payment.paymentMethodId,
+      installments: dto.payment.installments,
+    });
+
     return {
       orderId: order.id,
       orderNumber: order.orderNumber,
       payment: {
         method: dto.payment.method,
-        expiresAt: paymentRecord.expiresAt?.toISOString(),
+        externalId: mpResult.externalId,
+        qrCode: mpResult.qrCode,
+        qrCodeBase64: mpResult.qrCodeBase64,
+        barcode: mpResult.barcode,
+        boletoUrl: mpResult.boletoUrl,
+        expiresAt: mpResult.expiresAt,
       },
     };
   }

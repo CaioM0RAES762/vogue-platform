@@ -77,6 +77,16 @@ export default function CheckoutPage() {
         payment,
       });
       setResult(res);
+
+      // Redirecionar para tela de pagamento com dados do MP (D-03)
+      const params = new URLSearchParams({ method: res.payment.method });
+      if (res.payment.qrCodeBase64) params.set('qrCodeBase64', res.payment.qrCodeBase64);
+      if (res.payment.qrCode) params.set('qrCode', res.payment.qrCode);
+      if (res.payment.barcode) params.set('barcode', res.payment.barcode);
+      if (res.payment.boletoUrl) params.set('boletoUrl', res.payment.boletoUrl);
+      if (res.payment.expiresAt) params.set('expiresAt', res.payment.expiresAt);
+
+      router.push(`/pagamento/${res.orderId}?${params.toString()}`);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Erro ao finalizar pedido';
       setError(msg);
@@ -85,50 +95,8 @@ export default function CheckoutPage() {
     }
   }
 
-  // ─────────────────────────────────────────────
-  // Tela de sucesso
-  // ─────────────────────────────────────────────
-
-  if (result) {
-    return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-6 px-4 py-16 text-center">
-        <CheckCircle className="h-20 w-20 text-green-500" />
-        <div>
-          <h1 className="font-playfair text-3xl font-bold text-gray-900">
-            Pedido realizado com sucesso!
-          </h1>
-          <p className="mt-2 text-gray-600">
-            Número do pedido:{' '}
-            <span className="font-bold text-amber-600">#{result.orderNumber}</span>
-          </p>
-          {result.payment.method === 'PIX' && result.payment.expiresAt && (
-            <p className="mt-1 text-sm text-gray-500">
-              Você receberá as instruções de pagamento por e-mail.
-            </p>
-          )}
-          {result.payment.method === 'BOLETO' && (
-            <p className="mt-1 text-sm text-gray-500">
-              Seu boleto será enviado por e-mail. Vencimento em 3 dias úteis.
-            </p>
-          )}
-        </div>
-        <div className="flex gap-4">
-          <button
-            onClick={() => router.push('/minha-conta/pedidos')}
-            className="rounded-lg border border-amber-500 px-6 py-3 text-amber-600 hover:bg-amber-50"
-          >
-            Acompanhar Pedido
-          </button>
-          <button
-            onClick={() => router.push('/')}
-            className="rounded-lg bg-amber-500 px-6 py-3 text-white hover:bg-amber-600"
-          >
-            Continuar Comprando
-          </button>
-        </div>
-      </div>
-    );
-  }
+  // Tela de sucesso não é mais exibida aqui — redirecionamos para /pagamento/:orderId
+  if (result) return null;
 
   // ─────────────────────────────────────────────
   // Layout: 65% formulário + 35% resumo

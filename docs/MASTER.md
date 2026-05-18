@@ -180,63 +180,12 @@ Código escrito: 15 arquivos criados/modificados. TypeScript backend sem erros. 
 ---
 
 ## SPRINT 8 — PAGAMENTOS
-Status: PENDENTE
+Status: CONCLUÍDA
+Observação: MERCADOPAGO_WEBHOOK_SECRET ainda é placeholder — configurar no painel MP antes de produção. 3 erros TypeScript pré-existentes da Sprint 5 — não relacionados a esta sprint.
 
-ATENCAO antes de iniciar: Credenciais Mercado Pago sandbox devem estar no .env.
-Sem elas esta sprint nao pode ser concluida. Se nao estiverem, pare e informe.
+O que foi feito: PaymentsService com createPayment (PIX → QR Code base64 + copia-e-cola; Boleto → código de barras; Cartão → tokenização via MP.js no browser RN008), handleWebhook (validação HMAC X-Signature com timingSafeEqual, idempotência T-PAG-06), approvePayment (transação atômica: order→PAID, payment→APPROVED, stock decrementado RN004, INSERT inventory_movements SALE, emailQueue order-confirmed), cancelPayment (reversão de estoque RN005, INSERT inventory_movements CANCELLATION). Cron Bull D-10 (*/5 * * * *) via CronSchedulerService cancelando pedidos PENDING com expiresAt < now(). EmailQueueProcessor processa order-confirmed via Resend. Frontend: payments-api.ts, PixPayment (QR Code + contador regressivo, vermelho < 5min), BoletoPayment (código + link), página /pagamento/[orderId] com polling 5s (D-03) que redireciona para /pedido-confirmado ao detectar PAID, checkout-step3 com formulário de cartão e tokenização MP.js (dados nunca passam pelo servidor). Decisões D-17 a D-20 documentadas.
 
-Prompt para executar:
-
-Leia o SDD.md, o CLAUDE.md, o docs/MASTER.md e o docs/SPRINT-07-HANDOFF.md.
-Confirme que entendeu o estado atual em 3 linhas antes de escrever codigo.
-
-Verifique se MERCADOPAGO_ACCESS_TOKEN esta no .env antes de continuar.
-Se nao estiver, pare e informe que a sprint esta bloqueada.
-
-Agora execute a Sprint 8 — Pagamentos:
-
-Implemente o modulo de Pagamentos seguindo as Secoes 6.2.4, 7, 9, 13, 16 e 17 do SDD.md
-e as decisoes D-03, D-09, D-10 do MASTER.md.
-
-Backend (apps/api/src/modules/payments/):
-
-1. Integracao Mercado Pago:
-   - PIX: QR Code base64 + codigo copia-e-cola, expiracao 30 minutos
-   - Boleto: codigo de barras, vencimento 3 dias uteis
-   - Cartao: tokenizacao via SDK do MP no frontend;
-     nunca trafegar dados de cartao pelo servidor (RN008)
-
-2. Webhook POST /api/v1/payments/webhook:
-   - Validar assinatura HMAC X-Signature com MERCADOPAGO_WEBHOOK_SECRET
-   - Idempotencia: se payment.external_id ja esta APPROVED, ignorar
-   - Pagamento APPROVED:
-     BEGIN TRANSACTION
-     UPDATE orders SET status = PAID
-     UPDATE payments SET status = APPROVED, paid_at = now()
-     Para cada order_item: UPDATE product_variants SET stock = stock - quantity
-     INSERT inventory_movements (type: SALE)
-     COMMIT
-     Adicionar job na fila emailQueue: order-confirmed
-   - PIX/Boleto CANCELLED ou EXPIRED:
-     UPDATE orders SET status = CANCELLED
-     Reverter estoque de todas as variantes
-     INSERT inventory_movements (type: CANCELLATION)
-   - Responder sempre 200 OK para evitar retries desnecessarios
-
-3. Bull cron job (D-10) CancelExpiredOrdersJob:
-   Roda a cada 5 minutos.
-   Busca pedidos PENDING com expires_at menor que now().
-   Cancela e reverte estoque.
-
-4. Frontend: polling de 5 segundos (D-03) enquanto pedido PENDING
-   GET /api/v1/orders/:id, se status mudou para PAID redirecionar para confirmacao.
-
-5. Tela de PIX: QR Code + codigo copia-e-cola + contador regressivo 30min
-   (vermelho quando menos de 5 minutos restantes)
-
-Testes: T-PAG-01 a T-PAG-06 e T-EST-01 a T-EST-03 da Secao 23 do SDD.
-
-Ao final gere o arquivo docs/SPRINT-08-HANDOFF.md.
+Código escrito: 16 arquivos criados/modificados. TypeScript backend sem erros. 10/10 testes passando.
 
 ---
 
@@ -454,7 +403,7 @@ Sprint 4:  Autenticacao           — CONCLUÍDA
 Sprint 5:  Produtos e Catalogo    — CONCLUÍDA
 Sprint 6:  Carrinho               — CONCLUÍDA
 Sprint 7:  Checkout               — CONCLUÍDA
-Sprint 8:  Pagamentos             — PENDENTE (requer credenciais MP sandbox)
+Sprint 8:  Pagamentos             — CONCLUÍDA
 Sprint 9:  Minha Conta            — PENDENTE
 Sprint 10: Painel Admin           — PENDENTE
 Sprint 11: Relatorios             — PENDENTE

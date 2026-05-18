@@ -64,6 +64,18 @@ class EnvironmentVariables {
   @IsString()
   @IsOptional()
   FALLBACK_SHIPPING_PRICE: string = '15.00';
+
+  @IsString()
+  @IsOptional()
+  MERCADOPAGO_ACCESS_TOKEN: string = '';
+
+  @IsString()
+  @IsOptional()
+  MERCADOPAGO_PUBLIC_KEY: string = '';
+
+  @IsString()
+  @IsOptional()
+  MERCADOPAGO_WEBHOOK_SECRET: string = '';
 }
 
 export function validateEnv(config: Record<string, unknown>) {
