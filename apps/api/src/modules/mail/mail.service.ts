@@ -40,6 +40,33 @@ export class MailService {
     }
   }
 
+  async sendOrderCancelled(to: string, orderNumber: string): Promise<void> {
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL', 'http://localhost:3000');
+    const ordersUrl = `${frontendUrl}/minha-conta/pedidos`;
+
+    try {
+      await this.resend.emails.send({
+        from: this.from,
+        to,
+        subject: `Pedido ${orderNumber} cancelado — Janaina Modas`,
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #000000;">Pedido Cancelado</h2>
+            <p>Seu pedido <strong>${orderNumber}</strong> foi cancelado conforme solicitado.</p>
+            <p>Se o pagamento já havia sido confirmado, o estorno será processado em até 5 dias úteis.</p>
+            <a href="${ordersUrl}"
+               style="display:inline-block;padding:12px 24px;background:#C9A84C;color:#fff;text-decoration:none;border-radius:4px;font-weight:bold;margin:16px 0;">
+              Ver Meus Pedidos
+            </a>
+            <p style="color:#666;font-size:12px;">Obrigada por comprar na Janaina Modas!</p>
+          </div>
+        `,
+      });
+    } catch (error) {
+      this.logger.error('Erro ao enviar e-mail de cancelamento de pedido', { to, orderNumber, error });
+    }
+  }
+
   async sendPasswordReset(email: string, rawToken: string): Promise<void> {
     const frontendUrl = this.configService.get<string>('FRONTEND_URL', 'http://localhost:3000');
     const resetUrl = `${frontendUrl}/auth/redefinir-senha?token=${rawToken}`;

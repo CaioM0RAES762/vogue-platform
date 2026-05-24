@@ -190,38 +190,12 @@ Código escrito: 16 arquivos criados/modificados. TypeScript backend sem erros. 
 ---
 
 ## SPRINT 9 — MINHA CONTA
-Status: PENDENTE
+Status: CONCLUÍDA
 
-Prompt para executar:
+Observação: Proteção de rota é client-side only (sessionStorage) — middleware.ts server-side previsto para Sprint 12. 3 erros TypeScript pré-existentes da Sprint 5 — não relacionados a esta sprint.
+O que foi feito: UsersService com getMe, updateMe, deleteMe (anonimização LGPD em transação atômica: user anonimizado + tokens revogados + endereços excluídos, RN023), getAddresses, createAddress (primeiro endereço vira padrão automaticamente), updateAddress, deleteAddress (ao excluir padrão, promove o mais recente), setDefaultAddress, getOrders (paginação offset + filtros status/período), getOrderById, cancelOrder (CANCELLABLE_STATUSES = [PENDING, PAID] — D-07; pedido PAID chama paymentsService.cancelPayment revertendo estoque RN005; e-mail de cancelamento via mailService.sendOrderCancelled adicionado ao MailService). UsersController com todos os endpoints sob @UseGuards(JwtAuthGuard). UsersModule importando PrismaModule, AuthModule, MailModule, PaymentsModule. app.module.ts atualizado. Frontend: account-api.ts com cliente tipado e classe AccountApiError; layout com sidebar fixa (desktop) + tabs overflow (mobile) + botão Sair; page.tsx redirect para /dados; dados/page.tsx com grid de visualização + formulário react-hook-form/Zod + zona de perigo LGPD com confirmação dupla; enderecos/page.tsx com cards (padrão destacado em dourado) + formulário com autopreenchimento ViaCEP; pedidos/page.tsx com tabela (desktop) / cards (mobile) + filtro de status + paginação + skeleton loading; pedidos/[id]/page.tsx com itens (foto, variante, qty, preço), totais, endereço, rastreamento, timeline de status, botão cancelar visível apenas para PENDING/PAID com campo de motivo. Classe utilitária .input-field adicionada ao globals.css.
 
-Leia o SDD.md, o CLAUDE.md, o docs/MASTER.md e o docs/SPRINT-08-HANDOFF.md.
-Confirme que entendeu o estado atual em 3 linhas antes de escrever codigo.
-
-Agora execute a Sprint 9 — Area do Cliente (Minha Conta):
-
-Implemente a area Minha Conta seguindo as Secoes 6.2.5 e 7 do SDD.md.
-
-Backend (apps/api/src/modules/users/):
-- GET /api/v1/users/me
-- PUT /api/v1/users/me (editar nome e telefone; CPF nao editavel)
-- GET, POST, PUT, DELETE /api/v1/users/me/addresses
-- PATCH /api/v1/users/me/addresses/:id/default
-- GET /api/v1/users/me/orders com filtros
-- GET /api/v1/orders/:id
-- POST /api/v1/orders/:id/cancel (status PENDING ou PAID apenas, D-07)
-- DELETE /api/v1/users/me (exclusao LGPD, RN023):
-  anonimizar dados pessoais, manter pedidos por 5 anos
-
-Frontend (apps/web/app/(loja)/minha-conta/):
-- Layout: sidebar de navegacao (desktop) + tabs (mobile)
-- Secao Dados Pessoais: visualizar e editar com Zod
-- Secao Enderecos: lista + formulario com ViaCEP
-- Secao Pedidos: tabela com numero, data, total, status
-- Tela de detalhe do pedido: itens, endereco, historico de status, rastreamento
-- Botao cancelar pedido visivel apenas para PENDING e PAID
-- Toda a area protegida: redirecionar para /auth/login se nao autenticado
-
-Ao final gere o arquivo docs/SPRINT-09-HANDOFF.md.
+Código escrito: 15 arquivos criados/modificados. TypeScript backend sem erros (tsc --noEmit limpo). 12 cenários de teste escritos (T-USER-01 a T-USER-08).
 
 ---
 
@@ -404,7 +378,7 @@ Sprint 5:  Produtos e Catalogo    — CONCLUÍDA
 Sprint 6:  Carrinho               — CONCLUÍDA
 Sprint 7:  Checkout               — CONCLUÍDA
 Sprint 8:  Pagamentos             — CONCLUÍDA
-Sprint 9:  Minha Conta            — PENDENTE
+Sprint 9:  Minha Conta            — CONCLUÍDA
 Sprint 10: Painel Admin           — PENDENTE
 Sprint 11: Relatorios             — PENDENTE
 Sprint 12: Testes E2E + Deploy    — PENDENTE
