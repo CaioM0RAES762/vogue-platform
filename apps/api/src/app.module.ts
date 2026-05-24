@@ -16,6 +16,7 @@ import { CartModule } from './modules/cart/cart.module';
 import { CheckoutModule } from './modules/checkout/checkout.module';
 import { PaymentsModule } from './modules/payments/payments.module';
 import { UsersModule } from './modules/users/users.module';
+import { AdminModule } from './modules/admin/admin.module';
 import { AppController } from './app.controller';
 
 @Module({
@@ -47,6 +48,7 @@ import { AppController } from './app.controller';
     CheckoutModule,
     PaymentsModule,
     UsersModule,
+    AdminModule,
   ],
 })
 export class AppModule {}
